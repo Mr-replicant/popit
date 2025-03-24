@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캐릭터 클릭 게임</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f8ff;
+        }
+        
+        .game-container {
+            text-align: center;
+        }
+        
+        .score-display {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #3366cc;
+        }
+        
+        .character {
+            width: 150px;
+            height: 150px;
+            background-color: #ffd699;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .character:hover {
+            background-color: #ffcc80;
+        }
+        
+        .character:active {
+            transform: scale(0.95);
+        }
+        
+        .character-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .key-instructions {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .key {
+            display: inline-block;
+            padding: 2px 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin: 0 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="score-display">
+            점수: <span id="score">0</span>
+        </div>
+        <div class="character" id="character" tabindex="0">
+            <svg class="character-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- 얼굴 -->
+                <circle cx="50" cy="50" r="40" fill="#FFCC80" />
+                
+                <!-- 눈 -->
+                <ellipse cx="35" cy="40" rx="5" ry="7" fill="white" />
+                <ellipse cx="65" cy="40" rx="5" ry="7" fill="white" />
+                
+                <!-- 눈동자 -->
+                <circle cx="35" cy="42" r="2.5" fill="#333" />
+                <circle cx="65" cy="42" r="2.5" fill="#333" />
+                
+                <!-- 볼 -->
+                <circle cx="30" cy="55" r="7" fill="#FFAB91" opacity="0.6" />
+                <circle cx="70" cy="55" r="7" fill="#FFAB91" opacity="0.6" />
+                
+                <!-- 입 -->
+                <path d="M 40 60 Q 50 70 60 60" stroke="#333" stroke-width="2" fill="none" />
+                
+                <!-- 모자 -->
+                <path d="M 25 30 Q 50 10 75 30" fill="#5D9CEC" />
+                <rect x="25" y="30" width="50" height="5" fill="#5D9CEC" />
+                
+                <!-- 귀여운 장식 -->
+                <circle cx="50" cy="20" r="5" fill="#FF5252" />
+            </svg>
+        </div>
+        <div class="key-instructions">
+            <span class="key">클릭</span>, <span class="key">Space</span> 또는 <span class="key">Enter</span> 키로 점수를 올릴 수 있습니다!
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        const scoreElement = document.getElementById('score');
+        const character = document.getElementById('character');
+        
+        // 점수 증가 및 애니메이션 함수
+        function increaseScore() {
+            score++;
+            scoreElement.textContent = score;
+            
+            // 클릭 효과를 위한 애니메이션
+            character.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                character.style.transform = 'scale(1)';
+            }, 100);
+            
+            // 10점 단위로 색상 변경
+            if (score % 10 === 0) {
+                const hue = Math.floor(Math.random() * 360);
+                document.querySelector('.character-svg circle:first-child').setAttribute('fill', `hsl(${hue}, 80%, 80%)`);
+            }
+        }
+        
+        // 마우스 클릭 이벤트
+        character.addEventListener('click', increaseScore);
+        
+        // 키보드 이벤트 (Enter 또는 Space 키)
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ' || event.keyCode === 13 || event.keyCode === 32) {
+                increaseScore();
+                event.preventDefault(); // 페이지 스크롤 방지
+            }
+        });
+        
+        // 캐릭터에 포커스
+        character.focus();
+    </script>
+</body>
+</html>
